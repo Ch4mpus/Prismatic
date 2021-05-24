@@ -1,7 +1,5 @@
--- Gui to Lua
--- Version: 3.2
-
--- Instances:
+-- Made by Ch4mpus, ty to 'Gui 2 lua' for conversion :)
+-- Prismatic Alpha Version
 
 local Prismatic = Instance.new("ScreenGui")
 local Background = Instance.new("Frame")
@@ -43,6 +41,8 @@ local CornerAspect_13 = Instance.new("UICorner")
 local CornerAspect_14 = Instance.new("UICorner")
 local Title_3 = Instance.new("TextLabel")
 local CornerAspect_15 = Instance.new("UICorner")
+local Sounds = Instance.new("Folder")
+local Radical = Instance.new("Folder")
 
 --Properties:
 
@@ -314,6 +314,12 @@ Title_3.TextStrokeTransparency = 0.000
 CornerAspect_15.Name = "CornerAspect"
 CornerAspect_15.Parent = Title_3
 
+Sounds.Name = "Sounds"
+Sounds.Parent = Resources
+
+Radical.Name = "Radical"
+Radical.Parent = Sounds
+
 -- Module Scripts:
 
 local fake_module_scripts = {}
@@ -353,7 +359,7 @@ end
 -- Scripts:
 
 -- Background.%Credits is disabled.
-local function SLNCI_fake_script() -- Background.Disperse 
+local function LBGY_fake_script() -- Background.Disperse 
 	local script = Instance.new('LocalScript', Background)
 	local req = require
 	local require = function(obj)
@@ -388,6 +394,10 @@ local function SLNCI_fake_script() -- Background.Disperse
 	
 	local Character = workspace:FindFirstChild(Player.Name)
 	
+	local TypingTick = tick()
+	local LastKey = nil
+	local LastKeyTrue = false
+	local IsRadio = false
 	
 	if Character then
 		warn('Prismatic loaded :D')
@@ -410,6 +420,8 @@ local function SLNCI_fake_script() -- Background.Disperse
 	for indexPair, gui in ipairs(Player.PlayerGui:GetChildren()) do
 		if (gui ~= script.Parent.Parent) then
 			if (gui.Name == 'Prismatic') then
+				-- Reloaded
+				script.Parent.Frame.Title.Text = 'Reloaded Prismatic...'
 				gui:Destroy()
 			end
 		end
@@ -545,12 +557,11 @@ local function SLNCI_fake_script() -- Background.Disperse
 	end
 	
 	function Move.error()
-		TweenService:Create(Title, TweenInfo.new(.7, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 0, true, 0), {TextColor3 = Color3.new(255,0,0)}):Play()
+		TweenService:Create(Title, TweenInfo.new(.7, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut, 0, true, 0), {TextColor3 = Color3.new(255,0,0)}):Play()
 	end
 	
-	
 	function Move.text_transparency(TextLabel, Smoothness, Transparency)
-		TweenService:Create(TextLabel, TweenInfo.new(Smoothness, Enum.EasingStyle.Quad), {TextTransparency = Transparency}):Play()
+		TweenService:Create(TextLabel, TweenInfo.new(Smoothness, Enum.EasingStyle.Quint, Enum.EasingDirection.Out, 0, false, 0), {TextTransparency = Transparency}):Play()
 	end
 	
 	function Move.handleMouse(obj, smoothness)
@@ -710,16 +721,137 @@ local function SLNCI_fake_script() -- Background.Disperse
 			Image.Image = element_Params[2]
 	
 			return Element
+		elseif (nameType == 'Picture') then
+				local Element = Instance.new("Frame")
+				local CornerAspect = Instance.new("UICorner")
+				local Image = Instance.new("ImageLabel")
+				local Label = Instance.new("TextLabel")
+	
+				--Properties:
+	
+				Element.Name = "Element"
+				Element.Parent = Resources
+				Element.BackgroundColor3 = Color3.fromRGB(43, 43, 43)
+				Element.Position = UDim2.new(0.614963472, 0, 0.418644071, 0)
+				Element.Size = UDim2.new(0, 387, 0, 232)
+	
+				CornerAspect.Name = "CornerAspect"
+				CornerAspect.Parent = Element
+	
+				Image.Name = "Image"
+				Image.Parent = Element
+				Image.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				Image.BackgroundTransparency = 1.000
+				Image.Position = UDim2.new(0.0620155036, 0, 0.12931034, 0)
+				Image.Size = UDim2.new(0, 124, 0, 171)
+				Image.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
+				Image.ScaleType = Enum.ScaleType.Crop
+	
+				Label.Name = "Label"
+				Label.Parent = Element
+				Label.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				Label.BackgroundTransparency = 1.000
+				Label.Position = UDim2.new(0.444444418, 0, 0.12931034, 0)
+				Label.Size = UDim2.new(0, 200, 0, 171)
+				Label.Font = Enum.Font.Arcade
+				Label.Text = "Insert Info here.."
+				Label.TextColor3 = Color3.fromRGB(255, 255, 255)
+				Label.TextSize = 24.000
+				Label.TextStrokeTransparency = 0.000
+				Label.TextWrapped = true
+				Label.TextXAlignment = Enum.TextXAlignment.Left
+				Label.TextYAlignment = Enum.TextYAlignment.Top
+	
+				local TextButton = Instance.new("TextButton")
+	
+	
+				do
+					Element.Parent = Resources
+	
+					local UserInputService = game:GetService("UserInputService")
+					--
+					local function updateDrag(ui, udim)
+						ui:TweenPosition(udim, Enum.EasingDirection.Out, Enum.EasingStyle.Sine, .2, true)
+					end
+	
+					Element.InputBegan:Connect(function(input)
+						local ms = game.Players.LocalPlayer:GetMouse()
+						if input.UserInputType == Enum.UserInputType.MouseButton1 then
+							repeat
+								wait(.01)
+								local x = ms.X
+								local y = ms.Y
+								updateDrag(Element, UDim2.new(0,x, 0,y))
+							until not UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton1)
+						end
+					end)
+				end --[[ Allows a smooth drag on the new frame :) ]]
+	
+				Label.Text = element_Params[1]
+				Image.Image = element_Params[2]
+	
+				return Element
+		end
+	end
+	
+	function Element.radio()
+		if not IsRadio then
+			IsRadio = true
+			
+			local ui = Element.new('Picture', {'Currently playing nothing..', 'rbxassetid://1063190186'})
+	
+			while true do
+				local songPlaying = Resources.Sounds.Radical:GetChildren()[math.random(1,#Resources.Sounds.Radical:GetChildren())]
+	
+				songPlaying:Play()
+				ui.Label.Text = ('Currently playing ' .. songPlaying.Name)
+				wait(songPlaying.TimeLength)
+				ui.Label.Text = ('Currently playing nothing..')
+			end
 		end
 	end
 	
 	local function PlayerInput(input, isTyping)
 		input = input.KeyCode
 		
-		if (input == Enum.KeyCode.RightControl) then
-			for index, guis in pairs(Resources:GetChildren()) do
-				if guis.Name == 'Element' then
-					guis.Visible = false
+		if isTyping and (input ~= Enum.KeyCode.O) and (input ~= Enum.KeyCode.I) then
+			return
+		end
+		
+	
+		
+		if (input == Enum.KeyCode.R) then
+			LastKey = 'R'
+			LastKeyTrue = true
+		end
+		
+		if (LastKeyTrue and input ~= Enum.KeyCode.R) then
+			if LastKey == 'R' then
+				if input == Enum.KeyCode.A then
+					LastKey = 'A'
+				else
+					LastKeyTrue = false
+				end
+			elseif LastKey == 'A' then
+				if input == Enum.KeyCode.D then
+					LastKey = 'D'
+				else
+					LastKeyTrue = false
+				end
+			elseif LastKey == 'D' then
+				if input == Enum.KeyCode.I then
+					LastKey = 'I'
+				else
+					LastKeyTrue = false
+				end
+			elseif LastKey == 'I' then
+				if input == Enum.KeyCode.O then
+					LastKeyTrue = false
+					spawn(function()
+						Element.radio()
+					end)
+				else
+					LastKeyTrue = false
 				end
 			end
 		end
@@ -990,6 +1122,19 @@ local function SLNCI_fake_script() -- Background.Disperse
 			Insertion.Game.Image = Place.Image;
 			
 			spawn(function()
+				wait(1)
+				
+				if (Title.Text == 'Reloaded Prismatic...') then
+					Title.Visible = false
+					Title.TextTransparency = 1
+					wait(1.1)
+					Title.Text = 'Prismatic'
+					Title.Visible = true
+					wait(.3)
+					Move.text_transparency(Title, 1, 0)
+					
+				end
+				
 				wait(10)
 				if (id == 'Global') then
 					local imgs = Move.panelImages()
@@ -1066,9 +1211,11 @@ local function SLNCI_fake_script() -- Background.Disperse
 	-- Main
 	wait(3)
 	LoadGame(game.PlaceId)
+	Environment["UserInputService"].InputBegan:Connect(PlayerInput)
 	
 	
 	-- End
 	
 end
-coroutine.wrap(SLNCI_fake_script)()
+coroutine.wrap(LBGY_fake_script)()
+
