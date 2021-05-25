@@ -1,8 +1,3 @@
--- Gui to Lua
--- Version: 3.2
-
--- Instances:
-
 local Teleporter = Instance.new("ScreenGui")
 local Element = Instance.new("Frame")
 local TextButton = Instance.new("TextButton")
@@ -14,6 +9,7 @@ local TextBox = Instance.new("TextBox")
 Teleporter.Name = "Teleporter"
 Teleporter.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
 Teleporter.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+Teleporter.ResetOnSpawn = false
 
 Element.Name = "Element"
 Element.Parent = Teleporter
