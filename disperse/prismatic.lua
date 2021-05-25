@@ -43,6 +43,10 @@ local Title_3 = Instance.new("TextLabel")
 local CornerAspect_15 = Instance.new("UICorner")
 local Sounds = Instance.new("Folder")
 local Radical = Instance.new("Folder")
+local Upscale = Instance.new("Frame")
+local CloseOpen = Instance.new("Frame")
+local CornerAspect_16 = Instance.new("UICorner")
+local TextButton_3 = Instance.new("TextButton")
 
 --Properties:
 
@@ -320,6 +324,33 @@ Sounds.Parent = Resources
 Radical.Name = "Radical"
 Radical.Parent = Sounds
 
+Upscale.Name = "Upscale"
+Upscale.Parent = Prismatic
+Upscale.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Upscale.BackgroundTransparency = 1.000
+Upscale.Size = UDim2.new(1, 0, 1, 0)
+
+CloseOpen.Name = "Close/Open"
+CloseOpen.Parent = Upscale
+CloseOpen.BackgroundColor3 = Color3.fromRGB(43, 43, 43)
+CloseOpen.Position = UDim2.new(0, 0, 1.20000005, 0)
+CloseOpen.Size = UDim2.new(0, 233, 0, 160)
+
+CornerAspect_16.CornerRadius = UDim.new(0, 12)
+CornerAspect_16.Name = "CornerAspect"
+CornerAspect_16.Parent = CloseOpen
+
+TextButton_3.Parent = CloseOpen
+TextButton_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextButton_3.BackgroundTransparency = 1.000
+TextButton_3.Position = UDim2.new(0.0686695278, 0, 0, 0)
+TextButton_3.Size = UDim2.new(0, 200, 0, 36)
+TextButton_3.Font = Enum.Font.Arcade
+TextButton_3.Text = "Prismatic"
+TextButton_3.TextColor3 = Color3.fromRGB(255, 255, 255)
+TextButton_3.TextSize = 32.000
+TextButton_3.TextStrokeTransparency = 0.000
+
 -- Module Scripts:
 
 local fake_module_scripts = {}
@@ -359,7 +390,7 @@ end
 -- Scripts:
 
 -- Background.%Credits is disabled.
-local function LBGY_fake_script() -- Background.Disperse 
+local function WJVGFF_fake_script() -- Background.Disperse 
 	local script = Instance.new('LocalScript', Background)
 	local req = require
 	local require = function(obj)
@@ -443,6 +474,16 @@ local function LBGY_fake_script() -- Background.Disperse
 		ScriptCard = {
 			Original = UDim2.new(0.27, 0,0.22, 0);
 			Invisible = UDim2.new(.55, 0,0.22, 0)
+		};
+		
+		PrismaticSize = {
+			Original = UDim2.new(0, 494,0, 264);
+			Invisible = UDim2.new(0, 0,0, 264)
+		};
+		
+		CloseOpen = {
+			Original = UDim2.new(0, 0,0.941, 0);
+			Invisible = UDim2.new(0, 0,1.2, 0)
 		}
 	}
 	
@@ -451,6 +492,9 @@ local function LBGY_fake_script() -- Background.Disperse
 	local Script = {}
 	
 	local Element = {}
+	
+	local Radio = {}
+	
 	
 	local Places = {
 		[4623386862] = {
@@ -512,7 +556,10 @@ local function LBGY_fake_script() -- Background.Disperse
 		[1215581239] = { --
 			Image = 'rbxassetid://3131051394';
 			Scripts = {
-				{'Doomspire Gui', 18, 3};
+				{'Basic Gui', 18, 3};
+				{'TP to Player', 11, 'inf'};
+				{'Doomspire Wrecker', 20, 3};
+				{'Doomspire Fricker', 19, 3};
 			};
 			Name = 'Doomspire Brickbattle';
 			Desc = "Classic and old.. I love this game. Also, it most likely has no anticheat."
@@ -539,17 +586,19 @@ local function LBGY_fake_script() -- Background.Disperse
 	local Insertion = Background.Frame
 	local Title = Insertion.Title
 	local Resources = Background.Parent.Resources
+	local Upscale = Background.Parent.Upscale
 	local Objectified = nil
 	
 	local Changable = true
 	
+	local Closed = false
 	-- Preset
 	Insertion.Position = UDim2.new(0,0,0,0)
 	Title.Position = PositionIndex.TitleCard.Invisible
 	Insertion.Game.Position = PositionIndex.GameCard.Invisible
 	Insertion.Scripts.Position = PositionIndex.ScriptCard.Invisible
 	Insertion.Info.Changes.Text = RC
-	
+	Upscale.Visible = true
 	-- Functions and Classes
 	
 	function Move.title_card()
@@ -579,6 +628,18 @@ local function LBGY_fake_script() -- Background.Disperse
 				TweenService:Create(obj, TweenInfo.new(smoothness, EASE), {ImageTransparency = OGCOLOR}):Play()
 			end
 		end)
+	end
+	
+	function Move.MouseEvent(obj, func)
+		if obj.MouseEnter then
+			obj.MouseEnter:Connect(function()
+				func(true)
+			end)
+			
+			obj.MouseLeave:Connect(function()
+				func(false)
+			end)
+		end
 	end
 	
 	function Move.handlePressed(obj, funct)
@@ -632,6 +693,14 @@ local function LBGY_fake_script() -- Background.Disperse
 	
 		TweenService:Create(Insertion.Game, TweenInfo.new(1, Enum.EasingStyle.Quint), {ImageTransparency = 0.4}):Play()
 		Changable = true
+	end
+	
+	
+	function Radio.new(sound, name)
+		local RadioObj = Instance.new('Sound')
+		RadioObj.SoundId = sound
+		RadioObj.Name = name
+		RadioObj.Parent = Resources.Sounds.Radical
 	end
 	
 	function Element.new(nameType, element_Params)
@@ -796,11 +865,23 @@ local function LBGY_fake_script() -- Background.Disperse
 	
 	function Element.radio()
 		if not IsRadio then
+			
+			local songs = {
+				{'rbxassetid://2604618912'; 'Legend of Brian' }; 
+				{'rbxassetid://334283059'; 'Whitewoods - Beachwalk'}
+			}
+			
 			IsRadio = true
 			
 			local ui = Element.new('Picture', {'Currently playing nothing..', 'rbxassetid://1063190186'})
-	
+			
+			for index, song in ipairs(songs) do
+				Radio.new(song[1], song[2])
+				wait()
+			end
+			
 			while true do
+				wait()
 				local songPlaying = Resources.Sounds.Radical:GetChildren()[math.random(1,#Resources.Sounds.Radical:GetChildren())]
 	
 				songPlaying:Play()
@@ -811,7 +892,7 @@ local function LBGY_fake_script() -- Background.Disperse
 		end
 	end
 	
-	local function PlayerInput(input, isTyping)
+	local function RadioInput(input, isTyping)
 		input = input.KeyCode
 		
 		if isTyping and (input ~= Enum.KeyCode.O) and (input ~= Enum.KeyCode.I) then
@@ -856,6 +937,19 @@ local function LBGY_fake_script() -- Background.Disperse
 			end
 		end
 		
+	end
+	
+	local function PlayerInput(input, isTyping)
+		input = input.KeyCode
+	
+		if (input == Enum.KeyCode.RightControl) then
+			if not Closed then
+				Closed = true
+				Background:TweenSize(PositionIndex.PrismaticSize.Invisible, Enum.EasingDirection.Out, Enum.EasingStyle.Sine, .7, true)
+				Upscale["Close/Open"]:TweenPosition(PositionIndex.CloseOpen.Original, Enum.EasingDirection.Out, Enum.EasingStyle.Sine, .7, true)
+			end
+		end
+	
 	end
 	--//--------------------\\--
 	
@@ -1061,6 +1155,19 @@ local function LBGY_fake_script() -- Background.Disperse
 				loadstring(game:HttpGet('https://pastebin.com/raw/wBQYMZrM'))()
 			end)
 		end;
+		
+		[19] = function() -- F
+			pcall(function()
+				loadstring(game:HttpGet(('https://pastebin.com/raw/NguHCk5t'),true))()
+			end)
+		end;
+		
+		[20] = function()-- D
+			pcall(function()
+				loadstring(game:HttpGet('https://pastebin.com/raw/WyqZ5CXE'))()
+			end)
+		end;
+	
 	}
 	
 	--\\--------------------//--
@@ -1166,12 +1273,19 @@ local function LBGY_fake_script() -- Background.Disperse
 			Insertion.GameDesc.Nam.Text = Place.Name;
 			Insertion.GameDesc.D.Text = Place.Desc
 			
+			if (string.len(Place.Desc) > 70) then
+				Insertion.GameDesc.D.TextScaled = true
+			end;
+			
+			if (string.len(Place.Name) >= 10) then
+				Insertion.GameDesc.Nam.TextScaled = true
+			end;
+			
 			Move.handlePressed(Insertion.Game, function()
 				Changable = false
 				Move.handleTransparence0(Insertion.Game, .3)
 				wait(.3)
 				Insertion.GameDesc:TweenSizeAndPosition(UDim2.new(0, 220,0, 148), Insertion.Game.Position, Enum.EasingDirection.Out, Enum.EasingStyle.Sine, .6)
-	
 			end);
 			
 			Move.handlePressed(Insertion.GameDesc.TextButton, function()
@@ -1189,6 +1303,20 @@ local function LBGY_fake_script() -- Background.Disperse
 				Move.first_page()
 			end);
 			
+			Move.handlePressed(Upscale["Close/Open"].TextButton, function()
+				Closed = false
+				Background:TweenSize(PositionIndex.PrismaticSize.Original, Enum.EasingDirection.Out, Enum.EasingStyle.Sine, .7, true)
+				Upscale["Close/Open"]:TweenPosition(PositionIndex.CloseOpen.Invisible, Enum.EasingDirection.Out, Enum.EasingStyle.Sine, .7, true)
+			end);
+			
+			Move.MouseEvent(Upscale["Close/Open"].TextButton, function(Hovering)
+				if Hovering then
+					TweenService:Create(Upscale["Close/Open"].TextButton, TweenInfo.new(.4, Enum.EasingStyle.Sine), {TextColor3 = Color3.fromRGB(145, 125, 255)}):Play()
+				else
+					TweenService:Create(Upscale["Close/Open"].TextButton, TweenInfo.new(.7, Enum.EasingStyle.Sine), {TextColor3 = Color3.fromRGB(255,255,255)}):Play()
+				end
+			end);
+			
 			for indexAmt, scriptPrompt in ipairs(Place.Scripts) do
 				Script.new(scriptPrompt[1], Place.Image, scriptPrompt[2], scriptPrompt[3]);
 			end;
@@ -1198,8 +1326,7 @@ local function LBGY_fake_script() -- Background.Disperse
 			wait(1)
 			
 		else
-			--Move.error()
-			LoadGame('Global')
+			LoadGame('Global');
 		end
 		
 		
@@ -1209,13 +1336,14 @@ local function LBGY_fake_script() -- Background.Disperse
 	
 	
 	-- Main
+	
 	wait(3)
 	LoadGame(game.PlaceId)
+	Environment["UserInputService"].InputBegan:Connect(RadioInput)
 	Environment["UserInputService"].InputBegan:Connect(PlayerInput)
 	
 	
 	-- End
 	
 end
-coroutine.wrap(LBGY_fake_script)()
-
+coroutine.wrap(WJVGFF_fake_script)()
